@@ -1,0 +1,41 @@
+
+name: "CryptoTradingBot"
+
+strategy:
+  ticker: "KRW-BTC"       # 거래 대상
+  interval_seconds: 10    # 분석 주기 (초)
+
+# 외부 API 설정
+apis:
+  alternative_me:
+    url: "https://api.alternative.me/fng/"
+
+
+# 분석 기준값 (Thresholds)
+thresholds:
+  sentiment:
+    extreme_fear: 25   # 이 값 미만이면 극단적 공포
+    fear: 50           # 이 값 미만이면 공포
+    greed: 75          # 이 값 미만이면 탐욕 (그 이상은 극단적 탐욕)
+  
+  technical:
+    ma_period: 200     # 추세 판단용 이동평균 기간 (일)
+    volatility_window: 20 # 변동성 계산 기간
+
+# [Team] 매매 엔진 설정 (Trading Engine)
+trading:
+  max_positions: 10        # 최대 보유 종목 수
+  fixed_trade_amount: 10000 # [User Request] 고정 매수 금액 (0이면 아래 risk_pct 비율 사용)
+  risk_pct: 0.01          # 계좌의 1% 리스크
+  blacklist: ["KRW-ADA"]  # [User Request] 매매 금지 코인 (보유 중이어도 건드리지 않음)
+  fee_slippage: 0.0005    # 0.05% 수수료+슬리피지
+  daily_loss_limit: -0.03 # 일일 -3% 손실 시 중단
+  max_consecutive_loss: 3 # 3회 연속 손절 시 중단
+  cooldown_bars: 4        # 손절 후 4개 캔들(1시간) 대기
+  
+  indicators:
+    donchian_n: 20          # 돈키안 채널 기간
+    adx_trend: 25           # 추세 레짐 기준
+    adx_range: 20           # 횡보 레짐 기준
+    bb_squeeze_lookback: 50 # 볼린저 밴드 스퀴즈 기간
+

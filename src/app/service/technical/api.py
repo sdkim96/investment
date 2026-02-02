@@ -1,0 +1,14 @@
+from .artifact import TechnicalArtifact
+from ..market import MarketData
+from ...config import AppConfig
+
+class TechnicalAnalyzer: 
+
+
+    def __init__(self, config: AppConfig) -> None:
+        self.config = config
+        
+
+    def analyze(self, data: MarketData) -> TechnicalArtifact:
+        # Implement technical analysis logic here
+        pass

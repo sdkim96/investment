@@ -1,9 +1,7 @@
 import os
 import httpx
 
-from .resources import (
-    V1,
-)
+from .resources import V1
 from .types import UpbitConfig
 
 class UpbitClient:
