@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from src.base import BaseModel
+
 
 class AppConfig(BaseModel):
     name: str

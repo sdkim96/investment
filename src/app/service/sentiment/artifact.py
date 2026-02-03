@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from src.base import BaseModel
 
 
 class SentimentArtifact(BaseModel): ...

@@ -1,6 +1,9 @@
+import typing as t
+
 from src.upbit.client import UpbitClient
 
 from .config import AppConfig
+from .event import Event
 from .service.market import MarketService
 from .service.sentiment import SentimentAnalyzer
 from .service.technical import TechnicalAnalyzer
@@ -23,7 +26,12 @@ class Runner:
 
 
     
-    def run(self) -> None:
+    def run(
+        self, 
+        run_id: str = "default_run"
+    ) -> t.Iterable[Event]:
+        
+        yield Event.Start(run_id=run_id)
         data = self.market_service.get_data()
         
         sentiment_artifact = self.sentiment_analyzer.analyze(data)

@@ -1,7 +1,7 @@
 import typing as t
 from typing_extensions import TypedDict
 
-from pydantic import BaseModel
+from src.base import BaseModel
 
 class UpbitConfig(TypedDict):
     """Represents the required configuration for Upbit API access."""
