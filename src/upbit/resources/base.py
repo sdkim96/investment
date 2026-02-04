@@ -34,7 +34,7 @@ class UpbitResourceBase:
         self._upbit_config = upbit_config
 
     
-    def get_one(
+    def _get_one(
         self,
         fmt: t.Type[ModelT],
         *,
@@ -61,7 +61,7 @@ class UpbitResourceBase:
             return None, UpbitDecodeError(str(e))
         
 
-    def get_list(
+    def _get_list(
         self,
         fmt: t.Type[ModelT],
         *,
@@ -88,7 +88,7 @@ class UpbitResourceBase:
             return None, UpbitDecodeError(str(e))
         
     
-    def post(
+    def _post(
         self,
         fmt: t.Type[ModelT],
         *,
@@ -115,7 +115,7 @@ class UpbitResourceBase:
             return None, UpbitDecodeError(str(e))
         
 
-    def delete(
+    def _delete(
         self,
         fmt: t.Type[ModelT],
         *,

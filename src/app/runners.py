@@ -32,7 +32,9 @@ class Runner:
     ) -> t.Iterable[Event]:
         
         yield Event.Start(run_id=run_id)
-        data = self.market_service.get_data()
+        data = self.market_service.get_data("KRW")
+        
+        yield Event.MarketDataFetched(data=data.to_dict())
         
         sentiment_artifact = self.sentiment_analyzer.analyze(data)
         technical_artifact = self.technical_analyzer.analyze(data)

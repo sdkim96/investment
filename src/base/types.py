@@ -11,8 +11,8 @@ JSONValue: t.TypeAlias = (
     | float
     | bool
     | None
-    | dict[str, "JSONValue"]
-    | list["JSONValue"]
+    | t.Dict[str, t.Any]
+    | t.List[t.Any]
 )
 
 
@@ -25,7 +25,7 @@ class SerdeCapable(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def _serialize(cls, value: t.Any) -> JSONValue:
+    def _serialize(cls, value: t.Any) -> t.Any:
         ...
 
     @classmethod

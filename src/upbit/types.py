@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import typing as t
+import pydantic
 from typing_extensions import TypedDict
 
 from src.base import BaseModel
@@ -207,3 +210,190 @@ class Order(BaseModel):
     - For buy orders: Cancelled amount
     - For sell orders: Cancelled quantity
     """
+
+
+
+class Market(BaseModel):
+    """Represents a market data structure returned by the Upbit API."""
+
+    market: str
+    """Market code.
+    [Example: "KRW-BTC"]
+    """
+
+    korean_name: str
+    """Korean name of the market."""
+
+    english_name: str
+    """English name of the market."""
+
+    market_event: MarketEvent
+    """Market caution event."""
+
+    @property
+    def quote_currency(self) -> str:
+        """Represents the head of the market code, indicating the quote currency."""
+        return f"{self.market.split('-')[0]}"
+
+
+class MarketEvent(BaseModel):
+    warning: bool
+    """Indicates if there is warning for the market.
+    The warning flag is true when the market is under caution due to abnormal price movements or other factors.
+    """
+
+    caution: Caution
+    """Represents the detailed caution information for the market."""
+
+
+class Caution(BaseModel):
+
+    price_fluctuations: bool = pydantic.Field(alias="PRICE_FLUCTUATIONS")
+    """Represents whether there is a price fluctuation caution for the market."""
+
+    trading_volume_soaring: bool = pydantic.Field(alias="TRADING_VOLUME_SOARING")
+    """Represents whether there is a trading volume soaring caution for the market."""
+
+    deposit_amount_soaring: bool = pydantic.Field(alias="DEPOSIT_AMOUNT_SOARING")
+    """Represents whether there is a deposit amount soaring caution for the market."""
+
+    global_price_differences: bool = pydantic.Field(alias="GLOBAL_PRICE_DIFFERENCES")
+    """Represents whether there is a global price differences caution for the market."""
+
+    concentration_of_small_accounts: bool = pydantic.Field(alias="CONCENTRATION_OF_SMALL_ACCOUNTS")
+    """Represents whether there is a concentration of small accounts caution for the market."""
+
+from pydantic import BaseModel
+from typing_extensions import Literal
+
+
+class Ticker(BaseModel):
+    """Represents ticker data returned by the Upbit API."""
+
+    market: str
+    """Trading pair code representing the market.
+    [Example] "KRW-BTC"
+    """
+
+    trade_date: str
+    """Recent trade date in UTC.
+    [Format] yyyyMMdd
+    """
+
+    trade_time: str
+    """Recent trade time in UTC.
+    [Format] HHmmss
+    """
+
+    trade_date_kst: str
+    """Recent trade date in KST.
+    [Format] yyyyMMdd
+    """
+
+    trade_time_kst: str
+    """Recent trade time in KST.
+    [Format] HHmmss
+    """
+
+    trade_timestamp: int
+    """The timestamp (in milliseconds) when the trade was executed."""
+
+    opening_price: float
+    """The opening price of the candle,
+    representing the first trading price during the candle period.
+    """
+
+    high_price: float
+    """The highest trading price,
+    recorded during the candle period.
+    """
+
+    low_price: float
+    """The lowest trading price,
+    recorded during the candle period.
+    """
+
+    trade_price: float
+    """The closing price of the candle,
+    representing the last trading price during the candle period.
+    """
+
+    prev_closing_price: float
+    """Previous day's closing price, based on UTC."""
+
+    change: Literal["EVEN", "RISE", "FALL"]
+    """Status of price change.
+
+    EVEN: No change
+    RISE: Increase
+    FALL: Decrease
+    """
+
+    change_price: float
+    """Absolute value of the price change compared to the previous day's closing price.
+    Calculated as "trade_price" - "prev_closing_price".
+    """
+
+    change_rate: float
+    """Absolute value of the price change rate compared to the previous day's closing price.
+    """
+
+    signed_change_price: float
+    """Price change compared to the previous day's closing price.
+
+    Positive (+): Current price is higher than previous day's closing price
+    Negative (-): Current price is lower than previous day's closing price
+    """
+
+    signed_change_rate: float
+    """Signed price change rate compared to the previous day's closing price.
+    [Example] 0.015 = 1.5% increase.
+    """
+
+    trade_volume: float
+    """Most recent trade volume for the trading pair."""
+
+    acc_trade_price: float
+    """Accumulated trade amount since UTC 00:00."""
+
+    acc_trade_price_24h: float
+    """Accumulated trade amount over the past 24 hours."""
+
+    acc_trade_volume: float
+    """Accumulated trade volume since UTC 00:00."""
+
+    acc_trade_volume_24h: float
+    """Accumulated trade volume over the past 24 hours."""
+
+    highest_52_week_price: float
+    """Highest trading price achieved in the past 52 weeks."""
+
+    highest_52_week_date: str
+    """Date when the 52-week high price was achieved.
+    [Format] yyyy-MM-dd
+    """
+
+    lowest_52_week_price: float
+    """Lowest trading price achieved in the past 52 weeks."""
+
+    lowest_52_week_date: str
+    """Date when the 52-week low price was achieved.
+    [Format] yyyy-MM-dd
+    """
+
+    timestamp: int
+    """The timestamp (in milliseconds) when the ticker was requested."""
+
+    # ----------------------
+    # Derived properties
+    # ----------------------
+
+    @property
+    def quote_currency(self) -> str:
+        """Quote currency (e.g. 'KRW' in 'KRW-BTC')."""
+        return self.market.split("-")[0]
+
+    @property
+    def base_currency(self) -> str:
+        """Base asset (e.g. 'BTC' in 'KRW-BTC')."""
+        return self.market.split("-")[1]

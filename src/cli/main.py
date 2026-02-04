@@ -38,8 +38,8 @@ def main():
         client=upbit_client,
     )
 
-    while True:
-        runner.run()
+    for event in runner.run():
+        print(event)
 
 
 if __name__ == "__main__":

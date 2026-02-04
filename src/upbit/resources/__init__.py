@@ -3,7 +3,8 @@ from functools import cached_property
 
 from .accounts import AccountsResource as Accounts
 from .orders import OrdersResource as Orders
-
+from .market import MarketResource as Market
+from .ticker import TickerResource as Ticker
 
 class V1:
     def __init__(self, client, upbit_config):
@@ -17,7 +18,14 @@ class V1:
     @cached_property
     def orders(self) -> Orders:
         return Orders(self._client, self._upbit_config)
+    
+    @cached_property
+    def market(self) -> Market:
+        return Market(self._client, self._upbit_config)
         
+    @cached_property
+    def ticker(self) -> Ticker:
+        return Ticker(self._client, self._upbit_config)
 
 __all__ = [
     "V1",

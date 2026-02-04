@@ -1,4 +1,4 @@
-from src.base import BaseModel
+from src.base import BaseModel, JSONValue
 
 class Event(BaseModel): 
     id: str
@@ -10,6 +10,7 @@ class Event(BaseModel):
     run_id: str
     """The ID of the run that generated this event."""
 
+    data: JSONValue | None = None
 
     @classmethod
     def Start(cls, run_id: str) -> "Event":
@@ -17,4 +18,13 @@ class Event(BaseModel):
             id="start",
             type="system",
             run_id=run_id,
+        )
+    
+    @classmethod
+    def MarketDataFetched(cls, data: JSONValue) -> "Event":
+        return cls(
+            id="market_data_fetched",
+            type="market",
+            run_id="default_run",
+            data=data,
         )

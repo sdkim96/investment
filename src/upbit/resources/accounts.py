@@ -9,7 +9,7 @@ class AccountsResource(UpbitResourceBase):
     
     def get(self) -> t.List[Account]:
         url = "https://api.upbit.com/v1/accounts"
-        response = self.get_list(Account, url=url, headers=self._build_headers())
+        response = self._get_list(Account, url=url, headers=self._build_headers())
         accounts, error = response
         if error:
             raise error

@@ -23,7 +23,7 @@ class OrdersResource(UpbitResourceBase):
         
         response = (
             self
-            .post(
+            ._post(
                 Order,
                 url=url, 
                 json=body,
