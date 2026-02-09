@@ -1,6 +1,9 @@
 import typing as t
 
-from src.upbit.client import UpbitClient
+from src.client import (
+    UpbitClient, 
+    AlternativeClient,
+)
 
 from .config import AppConfig
 from .event import Event
@@ -16,9 +19,10 @@ class Runner:
     def __init__(
         self,
         config: AppConfig,
-        client: UpbitClient,
+        upbit_client: UpbitClient,
+        alternative_client: AlternativeClient,
     ) -> None:
-        self.market_service = MarketService(config, client)
+        self.market_service = MarketService(config, upbit_client, alternative_client)
         self.sentiment_analyzer = SentimentAnalyzer(config)
         self.technical_analyzer = TechnicalAnalyzer(config)
         self.strategy_executor = StrategyExecutor(config)
@@ -44,3 +48,4 @@ class Runner:
         )
         
         self.executor_service.act_on_strategy(strategy_artifact)
+    

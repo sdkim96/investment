@@ -1,13 +1,19 @@
+from __future__ import annotations
 import typing as t
 
-from .base import UpbitResourceBase
+if t.TYPE_CHECKING:
+    from ..client import UpbitClient
+
 from ..types import (
     CreateOrderBody,
     Order,
 )
 
-class OrdersResource(UpbitResourceBase):
+class OrdersResource():
     
+    def __init__(self, client: "UpbitClient") -> None:
+        self._client = client
+
     def create(
         self,
         market: str = "KRW-BTC",
@@ -23,11 +29,12 @@ class OrdersResource(UpbitResourceBase):
         
         response = (
             self
+            ._client
             ._post(
                 Order,
                 url=url, 
                 json=body,
-                headers=self._build_headers(body)
+                headers=self._client._utils._build_headers(body) #type: ignore
             )
         )
         order, error = response

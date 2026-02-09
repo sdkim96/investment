@@ -3,7 +3,10 @@ import os
 import yaml
 
 import src.app as app
-import src.upbit as upbit
+from src.client import (
+    UpbitClient,
+    AlternativeClient,
+)
 
 
 def load_yaml(path: str) -> dict:
@@ -28,14 +31,16 @@ def main():
     raw_config = load_yaml(args.config)
     config = app.AppConfig(**raw_config)
 
-    upbit_client = upbit.UpbitClient(
+    upbit_client = UpbitClient(
         access_key=os.environ.get("UPBIT_ACCESS_KEY", None),
         secret_key=os.environ.get("UPBIT_SECRET_KEY", None),
     )
+    alternative_client = AlternativeClient()
 
     runner = app.Runner(
         config=config,
-        client=upbit_client,
+        upbit_client=upbit_client,
+        alternative_client=alternative_client,
     )
 
     for event in runner.run():

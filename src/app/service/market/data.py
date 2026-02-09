@@ -1,7 +1,9 @@
 import typing as t
+import datetime as dt
 
 from src.base import BaseModel
-from src.upbit.types import Ticker
+from src.client.upbit.types import Ticker
+from src.client.alternative.types import FearAndGreedEntry
 
 from ...types import CurrencyType
 
@@ -33,6 +35,20 @@ def _default_sort_by(validated_ticker: ValidatedTickers) -> float:
     return validated_ticker.change * validated_ticker.volume
 
 
+class FearAndGreedData(BaseModel):
+    entries: t.List[FearAndGreedEntry]
+    """List of fear and greed index entries."""
+
+    def get_entry(self, yyyymmdd: str) -> t.Optional[FearAndGreedEntry]:
+        if not yyyymmdd.isdigit() or len(yyyymmdd) != 8:
+            raise ValueError("Date must be in 'YYYYMMDD' format.")
+        
+        for entry in self.entries:
+            if dt.datetime.fromtimestamp(entry.timestamp).strftime("%Y%m%d") == yyyymmdd:
+                return entry
+            
+        return None
+
 class MarketData(BaseModel): 
 
     currency: CurrencyType
@@ -40,6 +56,9 @@ class MarketData(BaseModel):
 
     tickers: t.List[Ticker]
     """List of tickers for the specified currency."""
+
+    fear_and_greed: FearAndGreedData
+    """The fear and greed index data by date."""
 
 
     def calculate_validated_tickers(

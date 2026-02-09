@@ -1,6 +1,6 @@
-from src.upbit.client import UpbitClient
+from src.client import UpbitClient, AlternativeClient
 
-from .data import MarketData
+from .data import FearAndGreedData, MarketData
 from ...config import AppConfig
 from ...types import CurrencyType
 
@@ -10,23 +10,27 @@ class MarketService:
     def __init__(
         self,
         config: AppConfig,
-        client: UpbitClient,
+        upbit: UpbitClient,
+        alternative: AlternativeClient,
     ) -> None:
         self.config = config
-        self.client = client
+        self.upbit = upbit
+        self.alternative = alternative
 
 
     def get_data(self, currency: CurrencyType) -> MarketData:
 
-        tickers = self.client.v1.ticker.get_all(
+        tickers = self.upbit.v1.ticker.get_all(
             ",".join(
                 market.market 
-                for market in self.client.v1.market.get_all() 
+                for market in self.upbit.v1.market.get_all() 
                 if market.quote_currency == currency
             )
         )
+        fng_entries = self.alternative.fng.get()
         return MarketData(
             currency=currency,
             tickers=tickers,
+            fear_and_greed=FearAndGreedData(entries=fng_entries.data),
         )
         

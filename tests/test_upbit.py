@@ -1,4 +1,4 @@
-from src.upbit.client import UpbitClient
+from src.client import UpbitClient
 
 upbit = UpbitClient()
 
