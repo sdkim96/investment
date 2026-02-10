@@ -28,3 +28,13 @@ class Event(BaseModel):
             run_id="default_run",
             data=data,
         )
+    
+
+    @classmethod
+    def SentimentAnalyzed(cls, artifact: JSONValue) -> "Event":
+        return cls(
+            id="sentiment_analyzed",
+            type="sentiment",
+            run_id="default_run",
+            data=artifact,
+        )

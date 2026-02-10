@@ -41,6 +41,8 @@ class Runner:
         yield Event.MarketDataFetched(data=data.to_dict())
         
         sentiment_artifact = self.sentiment_analyzer.analyze(data)
+        yield Event.SentimentAnalyzed(artifact=sentiment_artifact.to_dict())
+        
         technical_artifact = self.technical_analyzer.analyze(data)
         strategy_artifact = self.strategy_executor.execute(
             sentiment_artifact, 

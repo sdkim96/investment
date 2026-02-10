@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import typing as t
 
+import pydantic
+
 from src.base import BaseModel
 
 
@@ -17,7 +19,7 @@ class FNGResponse(BaseModel):
 
 
 class FearAndGreedEntry(BaseModel):
-    value: str
+    value: int
     """The numeric value of the Fear and Greed Index."""
 
     value_classification: str
@@ -28,3 +30,13 @@ class FearAndGreedEntry(BaseModel):
 
     time_until_update: str | None = None
     """Time remaining until the next update of the index."""
+
+
+    @pydantic.field_validator("value")
+    @classmethod
+    def ensure_value_integer(cls, v: t.Any) -> int:
+        if isinstance(v, str) and v.isdigit():
+            return int(v)
+        if isinstance(v, int):
+            return v
+        raise ValueError("value must be an integer or a string representing an integer.")

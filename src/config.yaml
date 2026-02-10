@@ -17,6 +17,7 @@ thresholds:
     extreme_fear: 25   # 이 값 미만이면 극단적 공포
     fear: 50           # 이 값 미만이면 공포
     greed: 75          # 이 값 미만이면 탐욕 (그 이상은 극단적 탐욕)
+    extreme_greed: 100 # 이 값 이상이면 극단적 탐욕
   
   technical:
     ma_period: 200     # 추세 판단용 이동평균 기간 (일)
