@@ -10,6 +10,7 @@ from .accounts import AccountsResource as Accounts
 from .orders import OrdersResource as Orders
 from .market import MarketResource as Market
 from .ticker import TickerResource as Ticker
+from .candles import CandlesResource as Candles
 
 class V1:
     def __init__(self, client: "UpbitClient"):
@@ -31,6 +32,11 @@ class V1:
     @cached_property
     def ticker(self) -> Ticker:
         return Ticker(self._client)
+    
+    @cached_property
+    def candles(self) -> Candles:
+        return Candles(self._client)
+    
 
 __all__ = [
     "V1",

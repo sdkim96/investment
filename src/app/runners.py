@@ -28,7 +28,6 @@ class Runner:
         self.strategy_executor = StrategyExecutor(config)
         self.executor_service = ExecutorService(config)
 
-
     
     def run(
         self, 
@@ -36,14 +35,16 @@ class Runner:
     ) -> t.Iterable[Event]:
         
         yield Event.Start(run_id=run_id)
+
         data = self.market_service.get_data("KRW")
-        
         yield Event.MarketDataFetched(data=data.to_dict())
         
         sentiment_artifact = self.sentiment_analyzer.analyze(data)
         yield Event.SentimentAnalyzed(artifact=sentiment_artifact.to_dict())
         
-        technical_artifact = self.technical_analyzer.analyze(data)
+        technical_artifact = self.technical_analyzer.analyze(market_data=data, sentiment_artifact=sentiment_artifact)
+        yield Event.TechnicalAnalyzed(artifact=technical_artifact.to_dict())
+
         strategy_artifact = self.strategy_executor.execute(
             sentiment_artifact, 
             technical_artifact

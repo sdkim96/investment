@@ -38,3 +38,13 @@ class Event(BaseModel):
             run_id="default_run",
             data=artifact,
         )
+    
+
+    @classmethod
+    def TechnicalAnalyzed(cls, artifact: JSONValue) -> "Event":
+        return cls(
+            id="technical_analyzed",
+            type="technical",
+            run_id="default_run",
+            data=artifact,
+        )

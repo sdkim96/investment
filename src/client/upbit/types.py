@@ -397,3 +397,61 @@ class Ticker(BaseModel):
     def base_currency(self) -> str:
         """Base asset (e.g. 'BTC' in 'KRW-BTC')."""
         return self.market.split("-")[1]
+
+
+class Candle(BaseModel):
+    market: str
+    """Trading pair code representing the market."""
+
+    candle_date_time_utc: str
+    """Candle date and time in UTC.
+    [Format] yyyy-MM-ddTHH:mm:ssZ
+    """
+
+    candle_date_time_kst: str
+    """Candle date and time in KST.
+    [Format] yyyy-MM-ddTHH:mm:ss+09:00
+    """
+
+    opening_price: int
+    """The opening price of the candle,
+    representing the first trading price during the candle period.
+    """
+
+    high_price: int
+    """The highest trading price,
+    recorded during the candle period.
+    """
+
+    low_price: int
+    """The lowest trading price,
+    recorded during the candle period.
+    """
+
+    trade_price: int
+    """The closing price of the candle,
+    representing the last trading price during the candle period.
+    """
+
+    timestamp: int
+    """The timestamp (in milliseconds) when the candle was requested."""
+
+    candle_acc_trade_price: float
+    """Accumulated trade amount during the candle period."""
+
+    candle_acc_trade_volume: float
+    """Accumulated trade volume during the candle period."""
+
+    prev_closing_price: int
+    """Previous day's closing price, based on UTC."""
+
+    change_price: int
+    """Absolute value of the price change compared to the previous day's closing price.
+    Calculated as "trade_price" - "prev_closing_price".
+    """
+
+    change_rate: float
+    """Absolute value of the price change rate compared to the previous day's closing price.
+    """
+
+

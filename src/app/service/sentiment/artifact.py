@@ -7,7 +7,7 @@ from src.base import BaseModel
 
 class FearAndGreedClassification(TypedDict):
 
-    state: t.Literal["Extreme Fear", "Fear", "Neutral", "Greed", "Extreme Greed"]
+    state: t.Literal["N/A", "Extreme Fear", "Fear", "Neutral", "Greed", "Extreme Greed"]
     """The sentiment classification based on the Fear and Greed index."""
 
     interpretation: str
@@ -24,7 +24,7 @@ class SentimentArtifact(BaseModel):
 
     original_classfication: str
 
-    state: str
+    state: t.Literal["Extreme Fear", "Fear", "Neutral", "Greed", "Extreme Greed", "N/A"]
 
     interpretation: str
 

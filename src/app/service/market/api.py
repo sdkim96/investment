@@ -27,10 +27,15 @@ class MarketService:
                 if market.quote_currency == currency
             )
         )
+        candles = self.upbit.v1.candles.get_by_days(
+            market="KRW-BTC",
+            count=200,
+        )
         fng_entries = self.alternative.fng.get()
         return MarketData(
             currency=currency,
             tickers=tickers,
+            candles=candles,
             fear_and_greed=FearAndGreedData(entries=fng_entries.data),
         )
         

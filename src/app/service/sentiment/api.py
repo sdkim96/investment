@@ -14,7 +14,7 @@ class SentimentAnalyzer:
     def __init__(self, config: AppConfig) -> None:
         self.config = config
         
-        fng_map: dict[int, FearAndGreedClassification] = collections.defaultdict(dict)
+        fng_map: dict[int, FearAndGreedClassification] = collections.defaultdict(dict) # type: ignore
         
         for score in range(self.config.thresholds.sentiment.extreme_greed):
             if score < self.config.thresholds.sentiment.extreme_fear:

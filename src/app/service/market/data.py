@@ -2,7 +2,7 @@ import typing as t
 import datetime as dt
 
 from src.base import BaseModel
-from src.client.upbit.types import Ticker
+from src.client.upbit.types import Ticker, Candle
 from src.client.alternative.types import FearAndGreedEntry
 
 from ...types import CurrencyType
@@ -56,6 +56,9 @@ class MarketData(BaseModel):
 
     tickers: t.List[Ticker]
     """List of tickers for the specified currency."""
+
+    candles: t.List[Candle]
+    """List of candles for the specified currency."""
 
     fear_and_greed: FearAndGreedData
     """The fear and greed index data by date."""
