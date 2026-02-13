@@ -8,6 +8,7 @@ from .artifact import (
 from ..market import MarketData
 from ...config import AppConfig
 
+
 class SentimentAnalyzer: 
 
 

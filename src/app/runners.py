@@ -22,7 +22,11 @@ class Runner:
         upbit_client: UpbitClient,
         alternative_client: AlternativeClient,
     ) -> None:
-        self.market_service = MarketService(config, upbit_client, alternative_client)
+        self.market_service = MarketService(
+            config, 
+            upbit_client, 
+            alternative_client
+        )
         self.sentiment_analyzer = SentimentAnalyzer(config)
         self.technical_analyzer = TechnicalAnalyzer(config)
         self.strategy_executor = StrategyExecutor(config)
@@ -39,10 +43,10 @@ class Runner:
         data = self.market_service.get_data("KRW")
         yield Event.MarketDataFetched(data=data.to_dict())
         
-        sentiment_artifact = self.sentiment_analyzer.analyze(data)
+        sentiment_artifact = self.sentiment_analyzer.analyze(data=data)
         yield Event.SentimentAnalyzed(artifact=sentiment_artifact.to_dict())
         
-        technical_artifact = self.technical_analyzer.analyze(market_data=data, sentiment_artifact=sentiment_artifact)
+        technical_artifact = self.technical_analyzer.analyze(data=data)
         yield Event.TechnicalAnalyzed(artifact=technical_artifact.to_dict())
 
         strategy_artifact = self.strategy_executor.execute(

@@ -5,21 +5,12 @@ from src.base import BaseModel
 from src.client.upbit.types import Ticker, Candle
 from src.client.alternative.types import FearAndGreedEntry
 
+from .ohlcv import (
+    OHLCV, 
+    OHLCVData
+)
+from .validated_tickers import ValidatedTickers
 from ...types import CurrencyType
-
-
-class ValidatedTickers(BaseModel):
-    ticker: Ticker
-    """The ticker information."""
-
-    volume: float
-    """The calculated volume for validation."""
-
-    change: float
-    """The calculated change for validation."""
-
-    volatility: float
-    """The calculated volatility for validation."""
 
 
 def _default_volume_calculation(ticker: Ticker) -> float:
@@ -49,6 +40,7 @@ class FearAndGreedData(BaseModel):
             
         return None
 
+
 class MarketData(BaseModel): 
 
     currency: CurrencyType
@@ -64,7 +56,24 @@ class MarketData(BaseModel):
     """The fear and greed index data by date."""
 
 
-    def calculate_validated_tickers(
+    def get_ohlcv_data(self) -> OHLCVData:
+        ohlcv_data: OHLCVData = {}
+        
+        for candle in self.candles:
+            ohlcv = OHLCV(
+                open=candle.opening_price,
+                high=candle.high_price,
+                low=candle.low_price,
+                close=candle.trade_price,
+                volume=candle.candle_acc_trade_volume,
+                value=candle.candle_acc_trade_price,
+            )
+            ohlcv_data[dt.datetime.fromisoformat(candle.candle_date_time_utc)] = ohlcv
+        
+        return ohlcv_data
+
+
+    def get_validated_tickers(
         self,
         custom_volume_fn: t.Callable[[Ticker], float] = _default_volume_calculation,
         custom_change_fn: t.Callable[[Ticker], float] = _default_change_calculation,
@@ -95,5 +104,3 @@ class MarketData(BaseModel):
         if top_n is not None:
             validated_tickers = validated_tickers[:top_n]
         return validated_tickers
-
-

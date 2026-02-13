@@ -5,7 +5,7 @@ import typing as t
 
 from src.base import BaseModel
 
-from .ohlcv import OHLCVData
+from ..market.ohlcv import OHLCVData
 
 
 class SMAFn(t.Protocol):
